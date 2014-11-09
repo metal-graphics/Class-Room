@@ -422,6 +422,6 @@ int main(int argc, char** argv)
   glutMouseFunc(mouseFunction);    // Register callback handler for mouse interaction
   initGL();                        // Our own OpenGL initialization
   glutMainLoop();                  // Enter the infinite event-processing loop
-  
+
   return 0;
 }
