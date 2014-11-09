@@ -9,7 +9,9 @@
 using namespace std;
 
 /* Global variables */
-char title[] = "3D Shapes";
+char title[] = "Class-Room";
+int zoom = 0;
+int mouse_click = 0;
 
 /*Define some colors*/
 float  brown[]  = {0.65 ,0.5 ,0.39};
@@ -93,7 +95,6 @@ void DrawTiles(int colorflag,float x,float y,float z)
     cubefacecolor[2] = 0.752941;
   }
 
-
   glBegin(GL_QUADS); // Begin drawing the color cube with 6 quads
     // Top face (y = 1.0f)
     // Define vertices in counter-clockwise (CCW) order with normal pointing out
@@ -102,7 +103,6 @@ void DrawTiles(int colorflag,float x,float y,float z)
 
   glPopMatrix();
 }
-
 
 
 void DrawFloor(int width, int length,float baseX,float baseY,float baseZ) 
@@ -140,6 +140,7 @@ void DrawTableTop(float x,float y,float z,float legScaleX,float legScaleY,float 
   glPopMatrix();
 }
 
+
 void DrawTableLeg(float x,float y,float z,float legScaleX,float legScaleY,float legScaleZ,float topScaleX,float topScaleY,float topScaleZ,float *color) 
 {
   //float color[] = {.4,.2,.2};
@@ -172,6 +173,7 @@ void createTable(float x,float y,float z)
 
   glPopMatrix();
 }
+
 
 void createClassRoomWalls(float x,float y,float z,float scaleX,float scaleY,float scaleZ,float * color )
 {
@@ -309,6 +311,19 @@ void display()
 
   glLoadIdentity(); // Reset the model-view matrix
 
+  if( mouse_click == 1 )
+  {
+    zoom += 5;
+    glTranslatef( 0,0,zoom );
+    mouse_click = 0;
+  }
+  else if( mouse_click == 2 )
+  {
+    zoom -= 5;
+    glTranslatef( 0,0,zoom );
+    mouse_click = 0;
+  }
+
   // Render a color-cube consisting of 6 quads with different colors
   createTable(0, 2, -50);
 
@@ -353,8 +368,7 @@ Handler for window re-size event. Called back when the window first appears and
 whenever the window is re-sized with its new width and height 
 */
 void reshape(GLsizei width, GLsizei height) 
-{  
-  // GLsizei for non-negative integer
+{
   // Compute aspect ratio of the new window
   if (height == 0) 
     height = 1;                // To prevent divide by 0
@@ -380,17 +394,34 @@ void reshape(GLsizei width, GLsizei height)
 }
 
 
+void mouseFunction( int button, int state, int x, int y )
+{
+  if( button==GLUT_LEFT_BUTTON && state==GLUT_DOWN ) //if left button is clicked, zoomin
+  {
+    mouse_click = 1;
+    glutPostRedisplay();
+  }
+  else if( button==GLUT_RIGHT_BUTTON && state==GLUT_DOWN ) //if right button is clicked,zoomout
+  {
+    mouse_click = 2;
+    glutPostRedisplay();
+  }
+}
+
+
 /* Main function: GLUT runs as a console application starting at main() */
 int main(int argc, char** argv) 
 {
-  glutInit(&argc, argv);            // Initialize GLUT
-  glutInitDisplayMode(GLUT_DOUBLE); // Enable double buffered mode
-  glutInitWindowSize(640, 480);   // Set the window's initial width & height
-  glutInitWindowPosition(50, 50); // Position the window's initial top-left corner
-  glutCreateWindow(title);          // Create window with the given title
-  glutDisplayFunc(display);       // Register callback handler for window re-paint event
-  glutReshapeFunc(reshape);       // Register callback handler for window re-size event
-  initGL();                       // Our own OpenGL initialization
-  glutMainLoop();                 // Enter the infinite event-processing loop
+  glutInit(&argc, argv);           // Initialize GLUT
+  glutInitDisplayMode(GLUT_DOUBLE);// Enable double buffered mode
+  glutInitWindowSize(640, 480);    // Set the window's initial width & height
+  glutInitWindowPosition(50, 50);  // Position the window's initial top-left corner
+  glutCreateWindow(title);         // Create window with the given title
+  glutDisplayFunc(display);        // Register callback handler for window re-paint event
+  glutReshapeFunc(reshape);        // Register callback handler for window re-size event
+  glutMouseFunc(mouseFunction);    // Register callback handler for mouse interaction
+  initGL();                        // Our own OpenGL initialization
+  glutMainLoop();                  // Enter the infinite event-processing loop
+  
   return 0;
 }
