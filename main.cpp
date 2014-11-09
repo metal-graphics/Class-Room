@@ -12,6 +12,9 @@ using namespace std;
 char title[] = "Class-Room";
 int zoom = 0;
 int mouse_click = 0;
+int key_inp = 0;
+int panlr = 0;
+int panud = 0;
 
 /*Define some colors*/
 float  brown[]  = {0.65 ,0.5 ,0.39};
@@ -29,7 +32,7 @@ float choc[] = {0.36,0.2,0.09};
 
 
 /* Initialize OpenGL Graphics */
-void initGL() 
+void initGL()
 {
   glClearColor(0.0f, 0.0f, 0.0f, 1.0f); // Set background color to black and opaque
   glClearDepth(1.0f);                   // Set background depth to farthest
@@ -75,7 +78,7 @@ void DrawCube(float * color )
 }
 
 
-void DrawTiles(int colorflag,float x,float y,float z) 
+void DrawTiles(int colorflag,float x,float y,float z)
 {
   float cubefacecolor[] = {0.329412,0.329412,0.329412};
 
@@ -105,7 +108,7 @@ void DrawTiles(int colorflag,float x,float y,float z)
 }
 
 
-void DrawFloor(int width, int length,float baseX,float baseY,float baseZ) 
+void DrawFloor(int width, int length,float baseX,float baseY,float baseZ)
 {
   int i,j;
 
@@ -123,7 +126,7 @@ void DrawFloor(int width, int length,float baseX,float baseY,float baseZ)
 }
 
 
-void DrawTableTop(float x,float y,float z,float legScaleX,float legScaleY,float legScaleZ,float topScaleX,float topScaleY,float topScaleZ,float *color) 
+void DrawTableTop(float x,float y,float z,float legScaleX,float legScaleY,float legScaleZ,float topScaleX,float topScaleY,float topScaleZ,float *color)
 {
   //float color[] = {.4,.2,.2};
   glPushMatrix();
@@ -141,7 +144,7 @@ void DrawTableTop(float x,float y,float z,float legScaleX,float legScaleY,float 
 }
 
 
-void DrawTableLeg(float x,float y,float z,float legScaleX,float legScaleY,float legScaleZ,float topScaleX,float topScaleY,float topScaleZ,float *color) 
+void DrawTableLeg(float x,float y,float z,float legScaleX,float legScaleY,float legScaleZ,float topScaleX,float topScaleY,float topScaleZ,float *color)
 {
   //float color[] = {.4,.2,.2};
   glPushMatrix();
@@ -210,10 +213,10 @@ void createBench(float x,float y,float z)
 }
 
 
-void createBoard() 
+void createBoard()
 {
   glPushMatrix();
-  
+
   glTranslatef(0, 15, -60);  // Move right and into the screen
   glScalef(19,6,.1);
 
@@ -222,12 +225,12 @@ void createBoard()
     // Define vertices in counter-clockwise (CCW) order with normal pointing out
     DrawCube(black);
   glEnd();  // End of drawing color-cube
-  
+
   glPopMatrix();
 }
 
 
-void createDoor(float *color,float sx,float sy,float sz) 
+void createDoor(float *color,float sx,float sy,float sz)
 {
   glPushMatrix();
 
@@ -244,7 +247,7 @@ void createDoor(float *color,float sx,float sy,float sz)
 }
 
 
-void createLight() 
+void createLight()
 {
   glPushMatrix();
 
@@ -261,7 +264,7 @@ void createLight()
 }
 
 
-void createBook(float *color,float x,float y,float z) 
+void createBook(float *color,float x,float y,float z)
 {
   glPushMatrix();
 
@@ -297,16 +300,16 @@ void drawStage(float *color)
 */
 
 
-/* 
+/*
   Handler for window-repaint event. Called back when the window first appears and
   whenever the window needs to be re-painted.
 */
-void display() 
+void display()
 {
   int i,j;
 
   glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear color and depth buffers
-  
+
   glMatrixMode(GL_MODELVIEW);     // To operate on model-view matrix
 
   glLoadIdentity(); // Reset the model-view matrix
@@ -314,14 +317,39 @@ void display()
   if( mouse_click == 1 )
   {
     zoom += 5;
-    glTranslatef( 0,0,zoom );
+    glTranslatef( panlr,panud,zoom );
     mouse_click = 0;
   }
   else if( mouse_click == 2 )
   {
     zoom -= 5;
-    glTranslatef( 0,0,zoom );
+    glTranslatef( panlr,panud,zoom );
     mouse_click = 0;
+  }
+
+  if( key_inp == 2 )
+  {
+    panlr -= 5;
+    glTranslatef( panlr,panud,zoom );
+    key_inp = 0;
+  }
+  else if( key_inp == 1 )
+  {
+    panlr += 5;
+    glTranslatef( panlr,panud,zoom );
+    key_inp = 0;
+  }
+  else if( key_inp == 4 )
+  {
+    panud += 5;
+    glTranslatef( panlr,panud,zoom );
+    key_inp = 0;
+  }
+  else if( key_inp == 3 )
+  {
+    panud -= 5;
+    glTranslatef( panlr,panud,zoom );
+    key_inp = 0;
   }
 
   // Render a color-cube consisting of 6 quads with different colors
@@ -345,12 +373,12 @@ void display()
   createClassRoomWalls(-35,15,-70,.25,15,70,cream); //left
   createClassRoomWalls(35,15,-70,.25,15,70,cream); //right
   createClassRoomWalls(0,95,-35,50,60,60,white); //top
-  
+
   /* Draw the Class Board*/
   createBoard();
 
   createDoor(choc,9,16,9); // Draw Door
-  createDoor(wood,9,15,8); 
+  createDoor(wood,9,15,8);
 
   createLight(); // Draw Tubelight
 
@@ -363,16 +391,16 @@ void display()
 }
 
 
-/* 
+/*
 Handler for window re-size event. Called back when the window first appears and
-whenever the window is re-sized with its new width and height 
+whenever the window is re-sized with its new width and height
 */
-void reshape(GLsizei width, GLsizei height) 
+void reshape(GLsizei width, GLsizei height)
 {
   // Compute aspect ratio of the new window
-  if (height == 0) 
+  if (height == 0)
     height = 1;                // To prevent divide by 0
-  
+
   GLfloat aspect = (GLfloat)width / (GLfloat)height;
 
   // Set the viewport to cover the new window
@@ -409,8 +437,32 @@ void mouseFunction( int button, int state, int x, int y )
 }
 
 
+void keyboardInput(int key, int x, int y)
+{
+  switch(key)
+  {
+    case GLUT_KEY_LEFT:
+      key_inp = 1;
+      glutPostRedisplay();
+      break;
+    case GLUT_KEY_RIGHT:
+      key_inp = 2;
+      glutPostRedisplay();
+      break;
+    case GLUT_KEY_UP:
+      key_inp = 3;
+      glutPostRedisplay();
+      break;
+    case GLUT_KEY_DOWN:
+      key_inp = 4;
+      glutPostRedisplay();
+      break;
+  }
+}
+
+
 /* Main function: GLUT runs as a console application starting at main() */
-int main(int argc, char** argv) 
+int main(int argc, char** argv)
 {
   glutInit(&argc, argv);           // Initialize GLUT
   glutInitDisplayMode(GLUT_DOUBLE);// Enable double buffered mode
@@ -420,6 +472,7 @@ int main(int argc, char** argv)
   glutDisplayFunc(display);        // Register callback handler for window re-paint event
   glutReshapeFunc(reshape);        // Register callback handler for window re-size event
   glutMouseFunc(mouseFunction);    // Register callback handler for mouse interaction
+  glutSpecialFunc(keyboardInput);  // Register callback handler for keyboard interaction
   initGL();                        // Our own OpenGL initialization
   glutMainLoop();                  // Enter the infinite event-processing loop
 
