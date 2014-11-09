@@ -11,8 +11,6 @@ using namespace std;
 /* Global variables */
 char title[] = "Class-Room";
 int zoom = 0;
-int mouse_click = 0;
-int key_inp = 0;
 int panlr = 0;
 int panud = 0;
 
@@ -314,43 +312,7 @@ void display()
 
   glLoadIdentity(); // Reset the model-view matrix
 
-  if( mouse_click == 1 )
-  {
-    zoom += 5;
-    glTranslatef( panlr,panud,zoom );
-    mouse_click = 0;
-  }
-  else if( mouse_click == 2 )
-  {
-    zoom -= 5;
-    glTranslatef( panlr,panud,zoom );
-    mouse_click = 0;
-  }
-
-  if( key_inp == 2 )
-  {
-    panlr -= 5;
-    glTranslatef( panlr,panud,zoom );
-    key_inp = 0;
-  }
-  else if( key_inp == 1 )
-  {
-    panlr += 5;
-    glTranslatef( panlr,panud,zoom );
-    key_inp = 0;
-  }
-  else if( key_inp == 4 )
-  {
-    panud += 5;
-    glTranslatef( panlr,panud,zoom );
-    key_inp = 0;
-  }
-  else if( key_inp == 3 )
-  {
-    panud -= 5;
-    glTranslatef( panlr,panud,zoom );
-    key_inp = 0;
-  }
+  glTranslatef( panlr,panud,zoom );
 
   // Render a color-cube consisting of 6 quads with different colors
   createTable(0, 2, -50);
@@ -426,38 +388,34 @@ void mouseFunction( int button, int state, int x, int y )
 {
   if( button==GLUT_LEFT_BUTTON && state==GLUT_DOWN ) //if left button is clicked, zoomin
   {
-    mouse_click = 1;
-    glutPostRedisplay();
+    zoom+=5;
   }
   else if( button==GLUT_RIGHT_BUTTON && state==GLUT_DOWN ) //if right button is clicked,zoomout
   {
-    mouse_click = 2;
-    glutPostRedisplay();
+    zoom-=5;
   }
+  glutPostRedisplay();
 }
 
 
-void keyboardInput(int key, int x, int y)
+void SpecialInput(int key, int x, int y)
 {
   switch(key)
   {
     case GLUT_KEY_LEFT:
-      key_inp = 1;
-      glutPostRedisplay();
+      panlr+=5;
       break;
     case GLUT_KEY_RIGHT:
-      key_inp = 2;
-      glutPostRedisplay();
+      panlr-=5;
       break;
     case GLUT_KEY_UP:
-      key_inp = 3;
-      glutPostRedisplay();
+      panud-=5;
       break;
     case GLUT_KEY_DOWN:
-      key_inp = 4;
-      glutPostRedisplay();
+      panud+=5;
       break;
   }
+  glutPostRedisplay();
 }
 
 
@@ -472,7 +430,7 @@ int main(int argc, char** argv)
   glutDisplayFunc(display);        // Register callback handler for window re-paint event
   glutReshapeFunc(reshape);        // Register callback handler for window re-size event
   glutMouseFunc(mouseFunction);    // Register callback handler for mouse interaction
-  glutSpecialFunc(keyboardInput);  // Register callback handler for keyboard interaction
+  glutSpecialFunc(SpecialInput);   // Register callback handler for specials keys interaction
   initGL();                        // Our own OpenGL initialization
   glutMainLoop();                  // Enter the infinite event-processing loop
 
