@@ -70,7 +70,9 @@ void DrawCube(float * color ){
 void DrawTiles(int colorflag,float x,float y,float z) {
    float cubefacecolor[] = {0.329412,0.329412,0.329412};
     glScalef(1,1,1);
-   glLoadIdentity();                 // Reset the model-view matrix
+    
+    glPushMatrix();
+
    glTranslatef(x, y, z);  // Move right and into the screen
 
 
@@ -89,6 +91,8 @@ void DrawTiles(int colorflag,float x,float y,float z) {
       // Define vertices in counter-clockwise (CCW) order with normal pointing out
        DrawCube(cubefacecolor);
    glEnd();  // End of drawing color-cube
+
+    glPopMatrix();
 }
 
 
@@ -117,7 +121,7 @@ void DrawFloor(int width, int length,float baseX,float baseY,float baseZ) {
 
 void DrawTableTop(float x,float y,float z,float legScaleX,float legScaleY,float legScaleZ,float topScaleX,float topScaleY,float topScaleZ,float *color) {
     //float color[] = {.4,.2,.2};
-   glLoadIdentity();                 // Reset the model-view matrix
+    glPushMatrix();
 
    glTranslatef(x, y, z);  // Move right and into the screen
     glScalef(topScaleX,topScaleY,topScaleZ); //4,.25,1
@@ -128,11 +132,13 @@ void DrawTableTop(float x,float y,float z,float legScaleX,float legScaleY,float 
       // Define vertices in counter-clockwise (CCW) order with normal pointing out
     DrawCube(color);
    glEnd();  // End of drawing color-cube
+
+    glPopMatrix();
 }
 
 void DrawTableLeg(float x,float y,float z,float legScaleX,float legScaleY,float legScaleZ,float topScaleX,float topScaleY,float topScaleZ,float *color) {
    //float color[] = {.4,.2,.2};
-   glLoadIdentity();         // Reset the model-view matrix
+    glPushMatrix();
 
    glTranslatef(x,y,z);  // Move left and into the screen
    glScalef(legScaleX,legScaleY,legScaleZ); //.1,2,.1
@@ -142,12 +148,13 @@ void DrawTableLeg(float x,float y,float z,float legScaleX,float legScaleY,float 
       DrawCube(color);
 
    glEnd();  // End of drawing color-cube
+
+    glPopMatrix();
 }
 
 void createTable(float x,float y,float z){
 
-     glLoadIdentity();         // Reset the model-view matrix
-
+  glPushMatrix();
 
      DrawTableTop(x+0,y+4,z+-6,.1,2,.1,4,.35,1,brown);//co-ordinates
      //DrawTableTop(0,4,-10);//co-ordinates
@@ -158,13 +165,13 @@ void createTable(float x,float y,float z){
      DrawTableLeg(x+4-.2,y+2,z+-5,.15,2,.1,2,.25,1,brown);//co-ordinates
     DrawTableLeg(x+4-.2,y+2,z+-7,.15,2,.1,2,.25,1,brown);//co-ordinates
 
-
+  glPopMatrix();
 }
 
 void createClassRoomWalls(float x,float y,float z,float scaleX,float scaleY,float scaleZ,float * color ){
 
 
-    glLoadIdentity();         // Reset the model-view matrix
+  glPushMatrix();
 
 
 
@@ -178,12 +185,13 @@ void createClassRoomWalls(float x,float y,float z,float scaleX,float scaleY,floa
     DrawCube(color);
     glEnd();  // End of drawing color-cube
 
+  glPopMatrix();
 }
 
 
 void createBench(float x,float y,float z){
 
-     glLoadIdentity();         // Reset the model-view matrix
+  glPushMatrix();
 
 
      DrawTableTop(x+0,y+2,z+-6,.1,2,.1,4,.125,1,olive);//co-ordinates
@@ -195,11 +203,11 @@ void createBench(float x,float y,float z){
      DrawTableLeg(x+4-.2,y+1,z+-5,.1,1,.1,4,.125,1,olive);//co-ordinates
     DrawTableLeg(x+4-.2,y+1,z+-7,.1,1,.1,4,.125,1,olive);//co-ordinates
 
-
+  glPopMatrix();
 }
 
 void createBoard() {
-     glLoadIdentity();
+  glPushMatrix();
         glTranslatef(0, 15, -60);  // Move right and into the screen
     glScalef(19,6,.1);
 
@@ -210,11 +218,12 @@ void createBoard() {
     DrawCube(black);
 
     glEnd();  // End of drawing color-cube
+  glPopMatrix();
 }
 
 
 void createDoor(float *color,float sx,float sy,float sz) {
-     glLoadIdentity();
+  glPushMatrix();
         glTranslatef(43.7, 3, -56);  // Move right and into the screen
     glScalef(sx,sy,sz);
 
@@ -224,12 +233,14 @@ void createDoor(float *color,float sx,float sy,float sz) {
       // Define vertices in counter-clockwise (CCW) order with normal pointing out
     DrawCube(color);
     glEnd();  // End of drawing color-cube
+
+  glPopMatrix();
 }
 
 
 
 void createLight() {
-     glLoadIdentity();
+  glPushMatrix();
         glTranslatef(0, 25, -60);  // Move right and into the screen
     glScalef(13,0.3,.1);
 
@@ -240,10 +251,12 @@ void createLight() {
     DrawCube(white);
 
     glEnd(); // End of drawing color-cube
+
+  glPopMatrix();
 }
 
 void createBook(float *color,float x,float y,float z) {
-     glLoadIdentity();
+  glPushMatrix();
         glTranslatef(x,y,z);  // Move right and into the screen
     glScalef(0.5,0.25,.25);
 
@@ -254,6 +267,8 @@ void createBook(float *color,float x,float y,float z) {
     DrawCube(color);
 
     glEnd(); // End of drawing color-cube
+
+  glPopMatrix();
 }
 
 /*void drawStage(float *color)
@@ -278,6 +293,8 @@ void display() {
 
    glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); // Clear color and depth buffers
    glMatrixMode(GL_MODELVIEW);     // To operate on model-view matrix
+
+  glLoadIdentity(); // Reset the model-view matrix
 
    // Render a color-cube consisting of 6 quads with different colors
                         createTable(0, 2, -50);
@@ -335,7 +352,7 @@ void reshape(GLsizei width, GLsizei height) {  // GLsizei for non-negative integ
 
    // Set the aspect ratio of the clipping volume to match the viewport
    glMatrixMode(GL_PROJECTION);  // To operate on the Projection matrix
-   glLoadIdentity();             // Reset
+
    // Enable perspective projection with fovy, aspect, zNear and zFar
  //
  //(0,0,0,0,0,-100,0,0,-1);
