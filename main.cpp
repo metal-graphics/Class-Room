@@ -175,10 +175,10 @@ void createTable(float x,float y,float z)
   //DrawTableTop(0,4,-10);//co-ordinates
   //  DrawTableTop(0,4,-14);//co-ordinates
 
-  DrawTableLeg(x+-4+.2,y+2,z+-5,.15,2,.1,2,.25,1,brown, choc);//co-ordinates
-  DrawTableLeg(x+-4+.2,y+2,z+-7,.15,2,.1,2,.25,1,brown, choc);//co-ordinates
-  DrawTableLeg(x+4-.2,y+2,z+-5,.15,2,.1,2,.25,1,brown, choc);//co-ordinates
-  DrawTableLeg(x+4-.2,y+2,z+-7,.15,2,.1,2,.25,1,brown, choc);//co-ordinates
+  DrawTableLeg(x+-3.5+.2,y+1.75,z+-5,.15,2,.1,2,.25,1,brown, choc);//co-ordinates
+  DrawTableLeg(x+-3.5+.2,y+1.75,z+-7,.15,2,.1,2,.25,1,brown, choc);//co-ordinates
+  DrawTableLeg(x+3.5-.2,y+1.75,z+-5,.15,2,.1,2,.25,1,brown, choc);//co-ordinates
+  DrawTableLeg(x+3.5-.2,y+1.75,z+-7,.15,2,.1,2,.25,1,brown, choc);//co-ordinates
 
   glPopMatrix();
 }
@@ -210,10 +210,10 @@ void createBench(float x,float y,float z)
   //DrawTableTop(0,4,-10);//co-ordinates
   //  DrawTableTop(0,4,-14);//co-ordinates
 
-  DrawTableLeg(x+-4+.2,y+1,z+-5,.1,1,.1,4,.125,1,olive, black);//co-ordinates
-  DrawTableLeg(x+-4+.2,y+1,z+-7,.1,1,.1,4,.125,1,olive, black);//co-ordinates
-  DrawTableLeg(x+4-.2,y+1,z+-5,.1,1,.1,4,.125,1,olive, black);//co-ordinates
-  DrawTableLeg(x+4-.2,y+1,z+-7,.1,1,.1,4,.125,1,olive, black);//co-ordinates
+  DrawTableLeg(x+-3.7+.2,y+1,z+-5,.1,1,.1,4,.125,1,olive, black);//co-ordinates
+  DrawTableLeg(x+-3.7+.2,y+1,z+-7,.1,1,.1,4,.125,1,olive, black);//co-ordinates
+  DrawTableLeg(x+3.7-.2,y+1,z+-5,.1,1,.1,4,.125,1,olive, black);//co-ordinates
+  DrawTableLeg(x+3.7-.2,y+1,z+-7,.1,1,.1,4,.125,1,olive, black);//co-ordinates
 
   glPopMatrix();
 }
