@@ -13,9 +13,11 @@ char title[] = "Class-Room";
 int zoom = 0;
 int panlr = 0;
 int panud = 0;
+int refreshMills = 15;
+GLfloat angle = 0.0f;
 
 /*Define some colors*/
-float  brown[]  = {0.65 ,0.5 ,0.39};
+float brown[]  = {0.65 ,0.5 ,0.39};
 float white[] = {1,1,1};
 float black[] = {0,0,0};
 float blue[] = {.8,.8,.8};
@@ -41,36 +43,42 @@ void initGL()
 }
 
 
-void DrawCube(float * color )
+void DrawCube(float * color, float *color1 )
 {
   glColor3f(color[0],color[1],color[2]);
   glVertex3f( 1.0f, 1.0f,-1.0f);    // Top Right Of The Quad (Top)
   glVertex3f(-1.0f, 1.0f,-1.0f);    // Top Left Of The Quad (Top)
+  glColor3f(color1[0],color1[1],color1[2]);
   glVertex3f(-1.0f, 1.0f, 1.0f);    // Bottom Left Of The Quad (Top)
   glVertex3f( 1.0f, 1.0f, 1.0f);    // Bottom Right Of The Quad (Top)
   glColor3f(color[0],color[1],color[2]);
   glVertex3f( 1.0f,-1.0f, 1.0f);    // Top Right Of The Quad (Bottom)
   glVertex3f(-1.0f,-1.0f, 1.0f);    // Top Left Of The Quad (Bottom)
+  glColor3f(color1[0],color1[1],color1[2]);
   glVertex3f(-1.0f,-1.0f,-1.0f);    // Bottom Left Of The Quad (Bottom)
   glVertex3f( 1.0f,-1.0f,-1.0f);    // Bottom Right Of The Quad (Bottom)
   glColor3f(color[0],color[1],color[2]);
   glVertex3f( 1.0f, 1.0f, 1.0f);    // Top Right Of The Quad (Front)
   glVertex3f(-1.0f, 1.0f, 1.0f);    // Top Left Of The Quad (Front)
+  glColor3f(color1[0],color1[1],color1[2]);
   glVertex3f(-1.0f,-1.0f, 1.0f);    // Bottom Left Of The Quad (Front)
   glVertex3f( 1.0f,-1.0f, 1.0f);    // Bottom Right Of The Quad (Front)
   glColor3f(color[0],color[1],color[2]);
   glVertex3f( 1.0f,-1.0f,-1.0f);    // Top Right Of The Quad (Back)
   glVertex3f(-1.0f,-1.0f,-1.0f);    // Top Left Of The Quad (Back)
+  glColor3f(color1[0],color1[1],color1[2]);
   glVertex3f(-1.0f, 1.0f,-1.0f);    // Bottom Left Of The Quad (Back)
   glVertex3f( 1.0f, 1.0f,-1.0f);    // Bottom Right Of The Quad (Back)
   glColor3f(color[0],color[1],color[2]);
   glVertex3f(-1.0f, 1.0f, 1.0f);    // Top Right Of The Quad (Left)
   glVertex3f(-1.0f, 1.0f,-1.0f);    // Top Left Of The Quad (Left)
+  glColor3f(color1[0],color1[1],color1[2]);
   glVertex3f(-1.0f,-1.0f,-1.0f);    // Bottom Left Of The Quad (Left)
   glVertex3f(-1.0f,-1.0f, 1.0f);    // Bottom Right Of The Quad (Left)
   glColor3f(color[0],color[1],color[2]);
   glVertex3f( 1.0f, 1.0f,-1.0f);    // Top Right Of The Quad (Right)
   glVertex3f( -1.0f, 1.0f, 1.0f);    // Top Left Of The Quad (Right)
+  glColor3f(color1[0],color1[1],color1[2]);
   glVertex3f( -1.0f,-1.0f, 1.0f);    // Bottom Left Of The Quad (Right)
   glVertex3f( 1.0f,-1.0f,-1.0f);    // Bottom Right Of The Quad (Right)
 }
@@ -99,7 +107,7 @@ void DrawTiles(int colorflag,float x,float y,float z)
   glBegin(GL_QUADS); // Begin drawing the color cube with 6 quads
     // Top face (y = 1.0f)
     // Define vertices in counter-clockwise (CCW) order with normal pointing out
-    DrawCube(cubefacecolor);
+    DrawCube(cubefacecolor, cubefacecolor);
   glEnd();  // End of drawing color-cube
 
   glPopMatrix();
@@ -124,7 +132,7 @@ void DrawFloor(int width, int length,float baseX,float baseY,float baseZ)
 }
 
 
-void DrawTableTop(float x,float y,float z,float legScaleX,float legScaleY,float legScaleZ,float topScaleX,float topScaleY,float topScaleZ,float *color)
+void DrawTableTop(float x,float y,float z,float legScaleX,float legScaleY,float legScaleZ,float topScaleX,float topScaleY,float topScaleZ,float *color, float *color1)
 {
   //float color[] = {.4,.2,.2};
   glPushMatrix();
@@ -135,14 +143,14 @@ void DrawTableTop(float x,float y,float z,float legScaleX,float legScaleY,float 
   glBegin(GL_QUADS);  // Begin drawing the color cube with 6 quads
     // Top face (y = 1.0f)
     // Define vertices in counter-clockwise (CCW) order with normal pointing out
-    DrawCube(color);
+    DrawCube(color,color1);
   glEnd();  // End of drawing color-cube
 
   glPopMatrix();
 }
 
 
-void DrawTableLeg(float x,float y,float z,float legScaleX,float legScaleY,float legScaleZ,float topScaleX,float topScaleY,float topScaleZ,float *color)
+void DrawTableLeg(float x,float y,float z,float legScaleX,float legScaleY,float legScaleZ,float topScaleX,float topScaleY,float topScaleZ,float *color, float *color1)
 {
   //float color[] = {.4,.2,.2};
   glPushMatrix();
@@ -152,7 +160,7 @@ void DrawTableLeg(float x,float y,float z,float legScaleX,float legScaleY,float 
 
 
   glBegin(GL_QUADS);                // Begin drawing the color cube with 6 quads
-    DrawCube(color);
+    DrawCube(color,color1);
   glEnd();  // End of drawing color-cube
 
   glPopMatrix();
@@ -163,14 +171,14 @@ void createTable(float x,float y,float z)
 {
   glPushMatrix();
 
-  DrawTableTop(x+0,y+4,z+-6,.1,2,.1,4,.35,1,brown);//co-ordinates
+  DrawTableTop(x+0,y+4,z+-6,.1,2,.1,4,.35,1,brown, choc);//co-ordinates
   //DrawTableTop(0,4,-10);//co-ordinates
   //  DrawTableTop(0,4,-14);//co-ordinates
 
-  DrawTableLeg(x+-4+.2,y+2,z+-5,.15,2,.1,2,.25,1,brown);//co-ordinates
-  DrawTableLeg(x+-4+.2,y+2,z+-7,.15,2,.1,2,.25,1,brown);//co-ordinates
-  DrawTableLeg(x+4-.2,y+2,z+-5,.15,2,.1,2,.25,1,brown);//co-ordinates
-  DrawTableLeg(x+4-.2,y+2,z+-7,.15,2,.1,2,.25,1,brown);//co-ordinates
+  DrawTableLeg(x+-4+.2,y+2,z+-5,.15,2,.1,2,.25,1,brown, choc);//co-ordinates
+  DrawTableLeg(x+-4+.2,y+2,z+-7,.15,2,.1,2,.25,1,brown, choc);//co-ordinates
+  DrawTableLeg(x+4-.2,y+2,z+-5,.15,2,.1,2,.25,1,brown, choc);//co-ordinates
+  DrawTableLeg(x+4-.2,y+2,z+-7,.15,2,.1,2,.25,1,brown, choc);//co-ordinates
 
   glPopMatrix();
 }
@@ -187,7 +195,7 @@ void createClassRoomWalls(float x,float y,float z,float scaleX,float scaleY,floa
   glBegin(GL_QUADS);   // Begin drawing the color cube with 6 quads
     // Top face (y = 1.0f)
     // Define vertices in counter-clockwise (CCW) order with normal pointing out
-    DrawCube(color);
+    DrawCube(color, color);
   glEnd();  // End of drawing color-cube
 
   glPopMatrix();
@@ -198,14 +206,14 @@ void createBench(float x,float y,float z)
 {
   glPushMatrix();
 
-  DrawTableTop(x+0,y+2,z+-6,.1,2,.1,4,.125,1,olive);//co-ordinates
+  DrawTableTop(x+0,y+2,z+-6,.1,2,.1,4,.125,1,olive, black);//co-ordinates
   //DrawTableTop(0,4,-10);//co-ordinates
   //  DrawTableTop(0,4,-14);//co-ordinates
 
-  DrawTableLeg(x+-4+.2,y+1,z+-5,.1,1,.1,4,.125,1,olive);//co-ordinates
-  DrawTableLeg(x+-4+.2,y+1,z+-7,.1,1,.1,4,.125,1,olive);//co-ordinates
-  DrawTableLeg(x+4-.2,y+1,z+-5,.1,1,.1,4,.125,1,olive);//co-ordinates
-  DrawTableLeg(x+4-.2,y+1,z+-7,.1,1,.1,4,.125,1,olive);//co-ordinates
+  DrawTableLeg(x+-4+.2,y+1,z+-5,.1,1,.1,4,.125,1,olive, black);//co-ordinates
+  DrawTableLeg(x+-4+.2,y+1,z+-7,.1,1,.1,4,.125,1,olive, black);//co-ordinates
+  DrawTableLeg(x+4-.2,y+1,z+-5,.1,1,.1,4,.125,1,olive, black);//co-ordinates
+  DrawTableLeg(x+4-.2,y+1,z+-7,.1,1,.1,4,.125,1,olive, black);//co-ordinates
 
   glPopMatrix();
 }
@@ -221,7 +229,7 @@ void createBoard()
   glBegin(GL_QUADS);                // Begin drawing the color cube with 6 quads
     // Top face (y = 1.0f)
     // Define vertices in counter-clockwise (CCW) order with normal pointing out
-    DrawCube(black);
+    DrawCube(black, black);
   glEnd();  // End of drawing color-cube
 
   glPopMatrix();
@@ -238,7 +246,7 @@ void createDoor(float *color,float sx,float sy,float sz)
   glBegin(GL_QUADS);                // Begin drawing the color cube with 6 quads
     // Top face (y = 1.0f)
     // Define vertices in counter-clockwise (CCW) order with normal pointing out
-    DrawCube(color);
+    DrawCube(color, color);
   glEnd();  // End of drawing color-cube
 
   glPopMatrix();
@@ -255,7 +263,7 @@ void createLight()
   glBegin(GL_QUADS);                // Begin drawing the color cube with 6 quads
     // Top face (y = 1.0f)
     // Define vertices in counter-clockwise (CCW) order with normal pointing out
-    DrawCube(white);
+    DrawCube(white, white);
   glEnd(); // End of drawing color-cube
 
   glPopMatrix();
@@ -272,8 +280,24 @@ void createBook(float *color,float x,float y,float z)
   glBegin(GL_QUADS);                // Begin drawing the color cube with 6 quads
     // Top face (y = 1.0f)
     // Define vertices in counter-clockwise (CCW) order with normal pointing out
-    DrawCube(color);
+    DrawCube(color, color);
   glEnd(); // End of drawing color-cube
+
+  glPopMatrix();
+}
+
+
+void createFan()
+{
+  glPushMatrix();
+
+  DrawTableLeg(0, 25,-40,.15,4,.1,2,.25,1,brown,brown);//co-ordinates
+
+  DrawTableLeg(0, 21,-40,0.5,0.5,0.5,2,.25,1,red,choc);
+
+  DrawTableLeg(0, 21,-40,6,0.03,0.5,2,.25,1,white,choc);
+
+  DrawTableLeg(0, 21,-40,0.5,0.03,6,2,.25,1,white,choc);
 
   glPopMatrix();
 }
@@ -315,7 +339,11 @@ void display()
   glTranslatef( panlr,panud,zoom );
 
   // Render a color-cube consisting of 6 quads with different colors
+  glPushMatrix();
+  glTranslatef(0,0,60);
+  glScalef(2,1.5,2);
   createTable(0, 2, -50);
+  glPopMatrix();
 
   //Draw all the Benches
   for(i=0;i<6;i++)
@@ -344,12 +372,23 @@ void display()
 
   createLight(); // Draw Tubelight
 
-  createBook(black,2.5, 6.5, -52);
-  createBook(cyan,2.5, 6.75, -52);
+  glPushMatrix();
+  createBook(black,2.5, 9.4, -50.5);
+  createBook(cyan,2.5, 9.5, -50.5);
+  glPopMatrix();
 
-  DrawFloor(500,500,0,0,-6); //width,height,xy position
+  DrawFloor(52,52,0,0,-15); //width,height,xy position
+
+  glPushMatrix();
+  glTranslatef(0,21,-40);
+  glRotatef(angle, 0.0f, 1.0f, 0.0f);
+  glTranslatef(0,-21,40);
+  createFan();
+  glPopMatrix();
 
   glutSwapBuffers();  // Swap the front and back frame buffers (double buffering)
+
+  angle += 30.0f;
 }
 
 
@@ -370,6 +409,8 @@ void reshape(GLsizei width, GLsizei height)
 
   // Set the aspect ratio of the clipping volume to match the viewport
   glMatrixMode(GL_PROJECTION);  // To operate on the Projection matrix
+
+  glLoadIdentity();
 
   // Enable perspective projection with fovy, aspect, zNear and zFar
   //(0,0,0,0,0,-100,0,0,-1);
@@ -419,6 +460,13 @@ void SpecialInput(int key, int x, int y)
 }
 
 
+void timer(int value)
+{
+   glutPostRedisplay();      // Post re-paint request to activate display()
+   glutTimerFunc(refreshMills, timer, 0); // next timer call milliseconds later
+}
+
+
 /* Main function: GLUT runs as a console application starting at main() */
 int main(int argc, char** argv)
 {
@@ -432,6 +480,7 @@ int main(int argc, char** argv)
   glutMouseFunc(mouseFunction);    // Register callback handler for mouse interaction
   glutSpecialFunc(SpecialInput);   // Register callback handler for specials keys interaction
   initGL();                        // Our own OpenGL initialization
+  glutTimerFunc(0, timer, 0);
   glutMainLoop();                  // Enter the infinite event-processing loop
 
   return 0;
