@@ -14,7 +14,8 @@ int zoom = 0;
 int panlr = 0;
 int panud = 0;
 int refreshMills = 15;
-GLfloat angle = 0.0f;
+GLfloat angle1 = 0.0f;
+GLfloat angle2 = 0.0f;
 
 /*Define some colors*/
 float brown[]  = {0.65 ,0.5 ,0.39};
@@ -287,17 +288,17 @@ void createBook(float *color,float x,float y,float z)
 }
 
 
-void createFan()
+void createFan( int x, int y, int z )
 {
   glPushMatrix();
 
-  DrawTableLeg(0, 25,-40,.15,4,.1,2,.25,1,brown,brown);//co-ordinates
+  DrawTableLeg(x,y+4,z,.15,4,.1,2,.25,1,brown,brown);//co-ordinates
 
-  DrawTableLeg(0, 21,-40,0.5,0.5,0.5,2,.25,1,red,choc);
+  DrawTableLeg(x,y,z,0.5,0.5,0.5,2,.25,1,red,choc);
 
-  DrawTableLeg(0, 21,-40,6,0.03,0.5,2,.25,1,white,choc);
+  DrawTableLeg(x,y,z,6,0.03,0.5,2,.25,1,white,choc);
 
-  DrawTableLeg(0, 21,-40,0.5,0.03,6,2,.25,1,white,choc);
+  DrawTableLeg(x,y,z,0.5,0.03,6,2,.25,1,white,choc);
 
   glPopMatrix();
 }
@@ -380,15 +381,23 @@ void display()
   DrawFloor(52,52,0,0,-15); //width,height,xy position
 
   glPushMatrix();
-  glTranslatef(0,21,-40);
-  glRotatef(angle, 0.0f, 1.0f, 0.0f);
-  glTranslatef(0,-21,40);
-  createFan();
+  glTranslatef(-13,21,-40);
+  glRotatef(angle1, 0.0f, 1.0f, 0.0f);
+  glTranslatef(13,-21,40);
+  createFan(-13, 21,-40);
+  glPopMatrix();
+
+  glPushMatrix();
+  glTranslatef(13,21,-40);
+  glRotatef(angle2, 0.0f, 1.0f, 0.0f);
+  glTranslatef(-13,-21,40);
+  createFan(13, 21,-40);
   glPopMatrix();
 
   glutSwapBuffers();  // Swap the front and back frame buffers (double buffering)
 
-  angle += 30.0f;
+  angle1 += 15.0f;
+  angle2 += 20.0f;
 }
 
 
