@@ -30,6 +30,7 @@ float cyan[] = {0.678431,0.917647,0.917647};
 float olive[] = {0.309804,0.309804,0.184314};
 float wood[] = {0.52,0.37,0.26};
 float choc[] = {0.36,0.2,0.09};
+float grey[] = {0.329412,0.329412,0.329412};
 
 
 /* Initialize OpenGL Graphics */
@@ -304,6 +305,18 @@ void createFan( int x, int y, int z )
 }
 
 
+void createProjector()
+{
+  glPushMatrix();
+
+  DrawTableLeg(0, 25,-50,.15,4,.1,2,.25,1,grey,grey );
+
+  DrawTableLeg(0,21,-50,0.5,0.5,0.5,2,.25,1,black,black);
+
+  glPopMatrix();
+}
+
+
 /*
 void drawStage(float *color)
 {
@@ -393,6 +406,8 @@ void display()
   glTranslatef(-13,-21,40);
   createFan(13, 21,-40);
   glPopMatrix();
+
+  createProjector();
 
   glutSwapBuffers();  // Swap the front and back frame buffers (double buffering)
 
