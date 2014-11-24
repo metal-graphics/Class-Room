@@ -16,6 +16,9 @@ int panud = 0;
 int refreshMills = 15;
 GLfloat angle1 = 0.0f;
 GLfloat angle2 = 0.0f;
+bool fanOn = false;
+bool rot = false;
+GLfloat rotate = 0.0f;
 
 /*Define some colors*/
 float brown[]  = {0.65 ,0.5 ,0.39};
@@ -350,6 +353,8 @@ void display()
 
   glLoadIdentity(); // Reset the model-view matrix
 
+  glRotatef(rotate, 0.0f, 1.0f, 0.0f);
+
   glTranslatef( panlr,panud,zoom );
 
   // Render a color-cube consisting of 6 quads with different colors
@@ -411,8 +416,11 @@ void display()
 
   glutSwapBuffers();  // Swap the front and back frame buffers (double buffering)
 
-  angle1 += 15.0f;
-  angle2 += 20.0f;
+  if(fanOn)
+  {
+    angle1 += 15.0f;
+    angle2 += 20.0f;
+  }
 }
 
 
@@ -463,6 +471,25 @@ void mouseFunction( int button, int state, int x, int y )
 }
 
 
+void keyFunction(unsigned char key, int x, int y)
+{
+  if(key=='f')
+  {
+    fanOn^=1;
+  }
+  else if(key=='l')
+  {
+    rotate+=5.0f;
+  }
+  else if(key=='r')
+  {
+    rotate-=5.0f;
+  }
+
+  glutPostRedisplay();
+}
+
+
 void SpecialInput(int key, int x, int y)
 {
   switch(key)
@@ -503,6 +530,7 @@ int main(int argc, char** argv)
   glutReshapeFunc(reshape);        // Register callback handler for window re-size event
   glutMouseFunc(mouseFunction);    // Register callback handler for mouse interaction
   glutSpecialFunc(SpecialInput);   // Register callback handler for specials keys interaction
+  glutKeyboardFunc(keyFunction);   // Register callback handler for keyboard keys
   initGL();                        // Our own OpenGL initialization
   glutTimerFunc(0, timer, 0);
   glutMainLoop();                  // Enter the infinite event-processing loop
